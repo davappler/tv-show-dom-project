@@ -172,7 +172,8 @@ function createEpisodeFromObject(episodeObj)
   image.alt=`Episode ${episodeObj.name}`;
 
   description.setAttribute("class","description");
-  description.textContent=episodeObj.summary;
+  description.textContent=episodeObj.summary.replace("<p>","");
+  description.textContent=description.textContent.replace("</p>","");
 
   episodeBox.appendChild(title);
   episodeBox.appendChild(image);
