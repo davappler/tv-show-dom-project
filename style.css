@@ -12,10 +12,11 @@ body
 .search-area
 {
   display: flex;
-  border: 2px solid white;
+  border: 2px solid rgb(255, 255, 255);
   width: 80%;
   justify-content: space-evenly;
   color:white;
+  padding:1em;
 }
 
 #search-form
