@@ -1,18 +1,144 @@
-//You can edit ALL of the code here
-// we have 73 episodes
+
+// things to do
+// refresh the page when search field is empty, add all childs
+// Allow search field to search for multiple words too.
+// now it is working for multiple words but I want it to search the words in order as we type
+// remove <p> tags from description
+// fix search and mke it run properly in order
+
+
+
+
 function setup() {
   let container=document.querySelector(".episodes-container");
-  console.log(container);
-  const allEpisodes = getAllEpisodes();
-  makePageForEpisodes(allEpisodes);
+  let search=document.querySelector("#search");
 
+  let dropDown=document.querySelector("#episodes");
+
+  
+
+  const allEpisodes = getAllEpisodes();
   for(let i=0;i<allEpisodes.length;i++)
   {
   let epi=createEpisodeFromObject(allEpisodes[i]);
   container.appendChild(epi);
   }
+  // As soon as we enter in searchBox, this function will be called and page will be updated.
+  search.addEventListener("input",function(){
+    let keyword=search.value;
+    searchAndUpdate(keyword,allEpisodes);
+  })
+
+
+  dropDownMenu(allEpisodes);
+
+  // this event listener is for the select drop down menu
+  // it will find the item and display it
+    dropDown.addEventListener("change",function()
+    {
+      let searchValue= dropDown.value.split(" ");
+      searchAndUpdate(searchValue[0],allEpisodes); // we search only with episode number to be sure while searching so that we get exactly one episode displayed
+    });
+
 }
 
+
+function searchAndUpdate(keyword,allEpisodes)
+{
+  let arrayOfKeywords=keyword.split(" ");
+  for(let i=0;i<arrayOfKeywords.length;i++)
+  {
+    searchWord(arrayOfKeywords[i],allEpisodes);
+  }
+}
+
+// This function will search the keyword in the database and update the page
+function searchWord(keyword,allEpisodes)
+{
+  // break keyword into multiple words and search for all of them, call search and update mulitple times in that case
+  let container=document.querySelector(".episodes-container");
+  let counter=0;
+  let displayNumber=document.querySelector(".number-of-episodes");
+  // as soon as we enter a value to search we will empty the page.
+  // we need to refresh when search field is empty
+  // work on this.
+  removeAllChild(container);
+
+  for(let i=0;i<allEpisodes.length;i++)
+  {
+    let ssn=allEpisodes[i].season;
+    let epi=allEpisodes[i].number;
+
+    if(ssn<10)
+      ssn="0"+ssn;
+    if(epi<10)
+      epi="0"+epi;
+
+    // title is made up of name and episode number and season number.
+     let title= allEpisodes[i].name + " "+"S"+ssn+"E"+epi;
+     let description = allEpisodes[i].summary;
+
+    // searchElement is a function that returns true or false depending on, 
+    // if keyWord is found in the given title or description.
+    let found = searchElement(keyword,title,description); 
+
+    if(found) // if found then add it to the page
+    {
+      counter++;
+      let epi=createEpisodeFromObject(allEpisodes[i]);
+      container.appendChild(epi);
+    }
+  }
+
+  displayNumber.textContent=`Displaying ${counter}/73`;
+}
+
+function removeAllChild(parent)
+{
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);    
+  }
+}
+
+function dropDownMenu(allEpisodes)
+{
+  console.log("hey I work man!");
+  let dropDownBox=document.querySelector("#episodes");
+
+  for(let i=0;i<allEpisodes.length;i++)
+  {
+    // console.log("heyy")
+    let ssn=allEpisodes[i].season;
+    let epi=allEpisodes[i].number;
+
+    if(ssn<10)
+      ssn="0"+ssn;
+    if(epi<10)
+      epi="0"+epi;
+
+    // title is made up of name and episode number and season number.
+    let title=  "S"+ssn+"E"+epi + " -"+allEpisodes[i].name;
+    let option=document.createElement("OPTION");
+    option.value= title;
+    option.text= title;
+    dropDownBox.appendChild(option);
+    
+  }
+}
+
+// Here I did only when keyword is one single word
+// then I will change it to, if user enters multiple words.
+function searchElement( keyword, title, description)
+{
+  keyword=keyword.toLowerCase();
+  title=title.toLowerCase();
+  description=description.toLowerCase();
+
+  if(title.includes(keyword)  || description.includes(keyword))
+   return true;
+
+  return false;
+}
 
 function createEpisodeFromObject(episodeObj)
 {
@@ -36,9 +162,6 @@ function createEpisodeFromObject(episodeObj)
   else
     titleEpi=episodeObj.number;
 
-
-
-
   title.textContent=episodeObj.name + " S" + titleSsn+"E"+titleEpi;
   title.href=episodeObj.url;
   title.target="_blank";
@@ -47,7 +170,6 @@ function createEpisodeFromObject(episodeObj)
   image.setAttribute("class","episode-image");
   image.src=episodeObj.image.original;
   image.alt=`Episode ${episodeObj.name}`;
-
 
   description.setAttribute("class","description");
   description.textContent=episodeObj.summary;
@@ -58,14 +180,6 @@ function createEpisodeFromObject(episodeObj)
   
   return episodeBox;
 
-}
-
-function makePageForEpisodes(episodeList) {
-
-  // call a function for whole array, array has objects 
-   
-  // const rootElem = document.getElementById("episodes-container");
-  // rootElem.textContent = `Got ${episodeList.length} episode(s)`;
 }
 
 window.onload = setup;
