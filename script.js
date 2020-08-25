@@ -1,7 +1,7 @@
 
 // things to do
-// refresh the page when search field is empty, add all childs
-// Allow search field to search for multiple words too.
+// Allow search field to search for multiple words too. // verify this with others
+
 // now it is working for multiple words but I want it to search the words in order as we type
 // remove <p> tags from description
 // fix search and mke it run properly in order
