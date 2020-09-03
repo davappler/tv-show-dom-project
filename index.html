@@ -11,37 +11,24 @@
   <body>
 
     <div class="search-area">
-
-      
-      <form id="search-form">
+      <form onSubmit="return false;"  id="search-form">
         <label for="search"> SearchBox</label>
         <input type="text" id="search" name="search">
 
-
         <label for="episodes"></label>
-          <select name="episodes" id="episodes">
-          </select>
-  <!-- <input type="submit" value="Submit"> -->
-
-
-
+        <select name="episodes" id="episodes">
+        </select>
       </form>
       <p class="number-of-episodes">Displaying 73/73</p>
     </div>
     
     <div class="episodes-container">
     </div>
-
-    
     <hr>
     <footer class="footer">
       <hr>
-      <p class="footer-text">Data has been taken from <a id="tvmaze-link"href="https://www.tvmaze.com/"> TVMaze.com </a></p>
-      
+      <p class="footer-text">Data has been taken from <a target="_blank" id="tvmaze-link"href="https://www.tvmaze.com/"> TVMaze.com </a></p>
      </footer>
-
-
-
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
 

@@ -3,33 +3,36 @@
 // Allow search field to search for multiple words too. // verify this with others
 
 // now it is working for multiple words but I want it to search the words in order as we type
-// remove <p> tags from description
-// fix search and mke it run properly in order
+// ask for a better way to remove <p> tag
+
+// make a button to refresh.
 
 
 
 
 function setup() {
+
   let container=document.querySelector(".episodes-container");
-  let search=document.querySelector("#search");
-
-  let dropDown=document.querySelector("#episodes");
-
-  
+  let search=document.querySelector("#search"); // Search Box 
+  let dropDown=document.querySelector("#episodes"); //Drop Down menu
 
   const allEpisodes = getAllEpisodes();
+
+  // In this "for loop" we are creating episodes from objects and adding them to the webpage.
   for(let i=0;i<allEpisodes.length;i++)
   {
-  let epi=createEpisodeFromObject(allEpisodes[i]);
-  container.appendChild(epi);
+    let epi=createEpisodeFromObject(allEpisodes[i]);
+    container.appendChild(epi);
   }
-  // As soon as we enter in searchBox, this function will be called and page will be updated.
-  search.addEventListener("input",function(){
+  // As soon as we enter something in searchBox, this function will be called and page will be updated.
+  search.addEventListener("keyup",function(event){
+    event.preventDefault();
     let keyword=search.value;
+    if(event.keyCode==13)
     searchAndUpdate(keyword,allEpisodes);
   })
 
-
+  // Calling this function will create the dropDwown menu with 73 episodes.
   dropDownMenu(allEpisodes);
 
   // this event listener is for the select drop down menu
@@ -42,7 +45,7 @@ function setup() {
 
 }
 
-
+//This function is used to search.
 function searchAndUpdate(keyword,allEpisodes)
 {
   let arrayOfKeywords=keyword.split(" ");
@@ -55,13 +58,10 @@ function searchAndUpdate(keyword,allEpisodes)
 // This function will search the keyword in the database and update the page
 function searchWord(keyword,allEpisodes)
 {
-  // break keyword into multiple words and search for all of them, call search and update mulitple times in that case
   let container=document.querySelector(".episodes-container");
   let counter=0;
   let displayNumber=document.querySelector(".number-of-episodes");
   // as soon as we enter a value to search we will empty the page.
-  // we need to refresh when search field is empty
-  // work on this.
   removeAllChild(container);
 
   for(let i=0;i<allEpisodes.length;i++)
@@ -84,7 +84,7 @@ function searchWord(keyword,allEpisodes)
 
     if(found) // if found then add it to the page
     {
-      counter++;
+      counter++; // Number of episodes containing Keyword.
       let epi=createEpisodeFromObject(allEpisodes[i]);
       container.appendChild(epi);
     }
@@ -102,12 +102,10 @@ function removeAllChild(parent)
 
 function dropDownMenu(allEpisodes)
 {
-  console.log("hey I work man!");
   let dropDownBox=document.querySelector("#episodes");
 
   for(let i=0;i<allEpisodes.length;i++)
   {
-    // console.log("heyy")
     let ssn=allEpisodes[i].season;
     let epi=allEpisodes[i].number;
 
@@ -126,10 +124,11 @@ function dropDownMenu(allEpisodes)
   }
 }
 
-// Here I did only when keyword is one single word
-// then I will change it to, if user enters multiple words.
+// A boolean function which returns either true or false. 
+// returns true if title or description contain the given keyword.
 function searchElement( keyword, title, description)
 {
+  // transforming them to lowercase so that search is not case sensitive.
   keyword=keyword.toLowerCase();
   title=title.toLowerCase();
   description=description.toLowerCase();
