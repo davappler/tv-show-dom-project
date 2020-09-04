@@ -15,6 +15,12 @@ function setup() {
   let container=document.querySelector(".episodes-container");
   let search=document.querySelector("#search"); // Search Box 
   let dropDown=document.querySelector("#episodes"); //Drop Down menu
+  let refreshButton=document.querySelector(".refresh-button");
+
+  refreshButton.addEventListener("click",function(){
+
+    location.reload();
+  })
 
   const allEpisodes = getAllEpisodes();
 
