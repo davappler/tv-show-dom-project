@@ -22,33 +22,49 @@ function setup() {
     location.reload();
   })
 
-  const allEpisodes = getAllEpisodes();
+  // const allEpisodes = getAllEpisodes();
+  let allEpisodes;
 
-  // In this "for loop" we are creating episodes from objects and adding them to the webpage.
-  for(let i=0;i<allEpisodes.length;i++)
+
+  fetch("https://api.tvmaze.com/shows/82/episodes")
+  .then(function(response)
   {
-    let epi=createEpisodeFromObject(allEpisodes[i]);
-    container.appendChild(epi);
-  }
-  // As soon as we enter something in searchBox, this function will be called and page will be updated.
-  search.addEventListener("keyup",function(event){
-    event.preventDefault();
-    let keyword=search.value;
-    if(event.keyCode==13)
-    searchAndUpdate(keyword,allEpisodes);
+    return response.json();
   })
+  .then(function(data)
+  {
+    allEpisodes=data;
 
-  // Calling this function will create the dropDwown menu with 73 episodes.
-  dropDownMenu(allEpisodes);
+    // In this "for loop" we are creating episodes from objects and adding them to the webpage.
+    for(let i=0;i<allEpisodes.length;i++)
+    {
+      let epi=createEpisodeFromObject(allEpisodes[i]);
+      container.appendChild(epi);
+    }
+    // As soon as we enter something in searchBox, this function will be called and page will be updated.
+    search.addEventListener("keyup",function(event){
+      event.preventDefault();
+      let keyword=search.value;
+      if(event.keyCode==13) // this is for pressing enter button.
+      searchAndUpdate(keyword,allEpisodes);
+    })
 
-  // this event listener is for the select drop down menu
-  // it will find the item and display it
+    // Calling this function will create the dropDown menu with 73 episodes.
+    dropDownMenu(allEpisodes);
+
+    // this event listener is for the select drop down menu
+    // it will find the item and display it
     dropDown.addEventListener("change",function()
     {
       let searchValue= dropDown.value.split(" ");
       searchAndUpdate(searchValue[0],allEpisodes); // we search only with episode number to be sure while searching so that we get exactly one episode displayed
     });
 
+  })
+  .catch(function(error)
+  {
+    console.log("Error")
+  })
 }
 
 //This function is used to search.
