@@ -4,24 +4,111 @@ body
   background-color: #05052e; 
 }
 
+
+.refresh-holder
+{
+  margin-left: 2rem;
+}
 .refresh-button
 {
-  position: fixed;
-  top: 3.3em;
+  /* position: fixed; */
+  /* top: 3.3em; */
   font-size: 1.2em;
   background-color: #f3bcbc;
+  margin-bottom: 1rem;
+}
+
+.display-episodes
+{
+  margin-top:-0.5rem;
 }
 .search-area
 {
   display: flex;
   border: 4px solid #f64c72;
-  width: 90%;
+  width: 95%;
   justify-content: space-evenly;
-  padding:1em;
+  padding:0.8em;
   color:#f71647;
   margin:auto;
   font-size:1.5em;
   text-shadow: 1px 1px #f39b9b;
+}
+
+
+#more {
+  display: none;
+}
+
+#read-more-button
+{
+  color:pink;
+}
+.show
+{
+  background-color:rgb(245, 150, 171);
+  border: 2px solid;
+  margin:1em;
+  width:80%;
+}
+
+.show-title
+{
+  font-size:2.2em;
+  color:rgb(25, 16, 73);
+  text-align: center;
+  border:2px solid;
+  width:80%;
+  margin:1rem auto;
+}
+
+.show-title:hover
+{
+  background-color:rgb(161, 33, 108) ;
+}
+
+.description-and-rating
+{
+  /* color:pink; */
+  display:flex;
+  justify-content: space-between;
+  /* color:red; */
+  border: 2px solid;
+  padding:1em;
+  width:90%;
+  margin: 1em auto;
+  background-color: rgb(77, 10, 49);
+}
+
+.show-description
+{
+  color:rgb(248, 133, 171);
+  border: 2px solid;
+  width:40%;
+  padding:1em;
+}
+.show-image
+{
+  width:50%;
+  height:auto;
+  display:block;
+  margin:auto;
+}
+
+.show-text
+{
+  text-align: center;
+}
+
+.rating-list
+{
+  border:2px solid;
+  padding:1em 2.3rem;
+  list-style-type:none;
+  font-size:1.5em;
+  color:rgb(248, 133, 171);
+  background-color:rgb(145, 26, 51);
+  width:50%;
 }
 
 #episodes
@@ -44,10 +131,7 @@ body
   justify-content: space-evenly;
   width:70%;
 }
-.number-of-episodes
-{
-  margin-top: -0.5em;
-}
+
 
 .episodes-container
 {
@@ -102,6 +186,68 @@ body
   margin:2em;
   text-align: center;
 }
+
+
+
+
+
+
+
+.cast-team-container
+{
+  border:2px solid;
+  display:flex;
+  /* justify-content: space-around; */
+  flex-wrap: wrap;
+  width:90%;
+  margin:1rem auto;
+  background-color:rgb(145, 26, 51);
+}
+
+
+.cast-button
+{
+  padding:0.5rem;
+  font-size:2rem;
+  color:rgb(240, 172, 206);
+  margin:2rem auto;
+  width:40%;
+  background-color:rgb(145, 26, 51);
+  /* text-align: center; */
+  display:grid;
+}
+
+.cast-button:hover{
+  color:rgb(37, 4, 32);
+  background-color:rgba(19, 199, 145, 0.884);
+}
+
+.actor
+{
+  /* border:2px solid; */
+  display:flex;
+  justify-content: space-evenly;
+  padding:1em;
+  width:40%;
+}
+
+.cast-image
+{
+  width:8rem;
+  margin:1rem;
+  color: #ff1d4e;
+  border:2px solid;
+}
+
+.cast-name
+{
+  color:white;
+}
+
+
+
+
+
 
 .footer
 {

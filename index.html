@@ -8,15 +8,13 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
-  <body>
+  <body >
 
-    <div>
-      <button class="refresh-button">Refresh</button>
-    </div>
+   
     <div class="search-area">
       <form onSubmit="return false;"  id="search-form">
-        <label for="search"> SearchBox</label>
-        <input type="text" id="search" name="search">
+        <label for="search" > </label>
+        <input type="text" placeholder="Search Episode"id="search" name="search">
 
         <label for="episodes"></label>
         <select name="episodes" id="episodes">
@@ -26,10 +24,21 @@
         <select name="shows" id="shows">
         </select>
       </form>
-      <p class="number-of-episodes">Displaying 73/73</p>
+      <div class="refresh-holder" >
+        <p class="display-episodes">Displaying 73/73</p>
+      <button class="refresh-button">Main Page</button>
+      </div>
+      
+      
     </div>
     
     <div class="episodes-container">
+      <!-- here I am defining the show  -->
+      
+      <div class="show">
+        <!--  -->
+      </div>
+      
     </div>
     <hr>
     <footer class="footer">
