@@ -13,17 +13,14 @@
 
 var episodeDataBase="";
 let container=document.querySelector(".episodes-container");
-createPageWithEpisodes(container,episodeDataBase);
+// createPageWithEpisodes(container,episodeDataBase);
 // let readMoreButton=document.createElement("BUTTON");
 
 function setup() {
-
-  let search=document.querySelector("#search"); // Search Box 
+ 
   let dropDownEpisodes=document.querySelector("#episodes"); //Drop Down menu for episodes
   let dropDownShowMenu=document.querySelector("#shows"); // Drop down menu for shows
   let refreshButton=document.querySelector(".refresh-button");
-
-  // var readMoreButton = document.getElementById("read-more-button");
 
 
   refreshButton.addEventListener("click",function(){
@@ -33,8 +30,6 @@ function setup() {
   // Taking all the shows in the variable allShows
   let allShows=getAllShows();
   dropDownShows(allShows);
-  // console.log(allShows);
-  // createShowPreview(allShows);
   createInitialPage(allShows);
  
 
@@ -43,16 +38,6 @@ function setup() {
   {
     createPageFromShow(dropDownShowMenu.value , allShows);
   });
-
-
-
-  // As soon as we enter something in searchBox, this function will be called and page will be updated.
-  search.addEventListener("keyup",function(event){
-    event.preventDefault();
-    let keyword=search.value;
-    if(event.keyCode==13) // this is for pressing enter button.
-    searchAndUpdate(keyword,episodeDataBase);
-  })
 
   // this event listener is for the select drop down menu of episodes.
   // it will find the item and display it
@@ -85,8 +70,8 @@ function setup() {
 
 
 // this function fetches data and call another function  makeCastTeam with the fetched Data.
-//ShowId will e used to append the created the castTam into show using this ID
-//ObjectId will be used to creat the API link to fetch data. 
+//ShowId will be used to append the created the castTeam into show using this ID
+//ObjectId will be used to create the API link to fetch data. 
 function createCasteTeamForShow(objectID,showID)
 {
   let URL="https://api.tvmaze.com/shows/"+objectID+"?embed=cast";
@@ -102,6 +87,8 @@ function createCasteTeamForShow(objectID,showID)
       console.log(error)
     })
 }
+
+//This function will create div element for cast team and when the button is clicked it will append it and remove it if pressed again.
 
 function makeCastTeam(showObject,showID)
 {
@@ -122,7 +109,7 @@ function makeCastTeam(showObject,showID)
   {
     if(embeddedArray[i])
     {
-      let actor=document.createElement("div");
+      let actor=document.createElement("div");//contains image and name of actor.
       let castImage=document.createElement("IMG");
       let castName=document.createElement("p");
 
@@ -136,9 +123,8 @@ function makeCastTeam(showObject,showID)
       if(source)
         castImage.src=source.medium;
 
-        let finalName=realName+"(as "+characterName+")"
-        castName.textContent=finalName;
-        // console.log(finalName)
+      let finalName=realName+"(as "+characterName+")"
+      castName.textContent=finalName;
       actor.appendChild(castName);
       actor.appendChild(castImage);
       castTeamContainer.appendChild(actor);
@@ -155,10 +141,9 @@ function makeCastTeam(showObject,showID)
     }
     else
     {
-      castButton.textContent="HIDE";
+      castButton.textContent="HIDE ^";
       show.appendChild(castTeamContainer);
     }
-
   })
 }
 
@@ -167,6 +152,10 @@ function makeCastTeam(showObject,showID)
 
 function createInitialPage(allShows)
 {
+  let forShow=true;
+  let allEpisodes=" ";
+  activateSearch(allEpisodes,allShows,forShow);
+
   for(let i=0;i<allShows.length;i++)
   {
     if(i!=50) // because at index 50 image url is not defined in show.js file.
@@ -188,11 +177,9 @@ function clickedShow(clicked)
 }
 
 
-
 // This function creates a show from one object. We intake index so that we can give specific id to every show.
 function createShowPreview(showObject,id)
 {
-  // console.log(showObject.id); this can be used later. for cast team
   let show=document.createElement("div");
   let showTitle=document.createElement("p");
 
@@ -225,7 +212,6 @@ function createShowPreview(showObject,id)
   show.setAttribute("class", "show");
   show.setAttribute("id", id);
   showTitle.setAttribute("id", id);
-  // readMoreButton.setAttribute("id","read-more-button");
   showTitle.setAttribute("class", "show-title");
   descriptionAndRating.setAttribute("class", "description-and-rating");
   showDescription.setAttribute("class","show-description");
@@ -259,7 +245,6 @@ function createShowPreview(showObject,id)
     showDescription.appendChild(showImage);
     showDescription.appendChild(showText);
     // showDescription.appendChild(readMoreButton);
-    // console.log("yes button appended man!")
   
     ratingList.appendChild(rating);
     ratingList.appendChild(genre);
@@ -273,20 +258,20 @@ function createShowPreview(showObject,id)
   
     show.appendChild(showTitle);
     show.appendChild(descriptionAndRating);
-    // show.appendChild(castTeam);
 
     container.appendChild(show);
     createCasteTeamForShow(showObject.id,id);
 }
 
 
-// function createCastForShow(id)
-// {
 
-// }
+
+
+
 
 function createPageFromShow(showSelected,allShows)
 {
+
   showSelected=String(showSelected);//Converting it to string to make sure it works perfectly in further steps.(in order to make split functioning without any hassle).
   let showNameAsArray= showSelected.split(" ");
   let container=document.querySelector(".episodes-container");
@@ -303,9 +288,6 @@ function createPageFromShow(showSelected,allShows)
 
     let URL="https://api.tvmaze.com/shows/"+SHOW_ID+"/episodes";
 
-
-    // createCasteTeamForShow(show.id);
-
     // Here we are fetching the data from the URL of the show. 
     fetch(URL)
     .then(function(response){
@@ -315,14 +297,37 @@ function createPageFromShow(showSelected,allShows)
       let allEpisodes=data;
       episodeDataBase=data; // We are modifying it here so that event listeners in setup function stay updated as well.
       createPageWithEpisodes(container,allEpisodes);
+      activateSearch(allEpisodes," ",false);
     })
     .catch(function(error){
       console.log(error)
     })
 
-
-    // displayNumber.textContent=`Displaying ${}/${allShows.length}`;
 }
+
+
+
+
+
+
+
+
+function activateSearch(allEpisodes,allShows,forShow)
+{
+  let search=document.querySelector("#search"); // Search Box
+
+  search.addEventListener("keyup",function(event){
+  event.preventDefault();
+  let keyword=search.value;
+  if(event.keyCode==13) // this is for pressing enter button.
+  searchAndUpdate(keyword,allEpisodes,forShow,allShows);//give allShows
+  })
+}
+
+
+
+
+
 
 //This function will add a span tag at the limit in the description, then we can use that span for read more and read les button.
 function addSpanAtLimit(paragraph)
@@ -351,8 +356,17 @@ function addSpanAtLimit(paragraph)
 	return finaltext;
 }
 
+
+
+
+
+
+
+
 function createPageWithEpisodes(container,allEpisodes)
 {
+  let displayNumber=document.querySelector(".display-episodes");
+  displayNumber.textContent=`Displaying ${allEpisodes.length}/${allEpisodes.length}`;
   for(let i=0;i<allEpisodes.length;i++)
     {
       let epi=createEpisodeFromObject(allEpisodes[i]);
@@ -361,6 +375,9 @@ function createPageWithEpisodes(container,allEpisodes)
     // Calling this function will create the dropDown menu with total episodes.
     dropDownMenu(allEpisodes);
 }
+
+
+
 
 
 
@@ -410,6 +427,8 @@ function createEpisodeFromObject(episodeObj)
 
 
 
+
+
 function dropDownMenu(allEpisodes)
 {
   let dropDownBox=document.querySelector("#episodes");
@@ -439,14 +458,13 @@ function dropDownMenu(allEpisodes)
 
 
 
+
 function removeAllChild(parent)
 {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild);    
   }
 }
-
-
 
 
 
@@ -470,56 +488,84 @@ function dropDownShows(allShows)
 
 
 
-
 //This function is used to search.
-function searchAndUpdate(keyword,allEpisodes)
+//forShow is a boolean variable telling us if the search if for show, if it is true then we search for shows otherwise for episodes.
+function searchAndUpdate(keyword,allEpisodes,forShow,allShows)
 {
   let arrayOfKeywords=keyword.split(" ");
   for(let i=0;i<arrayOfKeywords.length;i++)
   {
-    searchWord(arrayOfKeywords[i],allEpisodes);
+    searchWord(arrayOfKeywords[i],allEpisodes,forShow,allShows);
   }
 }
 
 
 
 
+
+
+
 // This function will search the keyword in the database and update the page
-function searchWord(keyword,allEpisodes)
+function searchWord(keyword,allEpisodes,forShow,allShows)
 {
   let container=document.querySelector(".episodes-container");
   let counter=0;
-  let displayNumber=document.querySelector(".number-of-episodes");
+  let displayNumber=document.querySelector(".display-episodes");
   // as soon as we enter a value to search we will empty the page.
   removeAllChild(container);
+  let title=" ";
+  let description=" ";
 
-  for(let i=0;i<allEpisodes.length;i++)
+
+  let currentSearchList;
+  if(forShow)
   {
-    let ssn=allEpisodes[i].season;
-    let epi=allEpisodes[i].number;
+    currentSearchList=allShows;
+  }
+  else{
+    currentSearchList=allEpisodes;
+  }
 
-    if(ssn<10)
-      ssn="0"+ssn;
-    if(epi<10)
-      epi="0"+epi;
+  for(let i=0;i<currentSearchList.length-1;i++)
+  {
+    if(!forShow) // for episodes
+    {
+      let ssn=allEpisodes[i].season;
+      let epi=allEpisodes[i].number;
 
-    // title is made up of name and episode number and season number.
-     let title= allEpisodes[i].name + " "+"S"+ssn+"E"+epi;
-     let description = allEpisodes[i].summary;
+      if(ssn<10)
+        ssn="0"+ssn;
+      if(epi<10)
+        epi="0"+epi;
 
+      // title is made up of name and episode number and season number.
+       title= allEpisodes[i].name + " "+"S"+ssn+"E"+epi;
+       description = allEpisodes[i].summary;
+    }
+    else
+    {
+      title=allShows[i].name;
+      description=allShows[i].summary;
+    }
     // searchElement is a function that returns true or false depending on, 
     // if keyWord is found in the given title or description.
     let found = searchElement(keyword,title,description); 
 
-    if(found) // if found then add it to the page
+    if(found) // if found then add it to the page.
     {
+      if(forShow && i!=50) // because at index 50 image url is not defined in show.js file.
+      {
+        createShowPreview(allShows[i],i);
+      }
+      else if(!forShow){
+
+        let epi=createEpisodeFromObject(allEpisodes[i]);
+        container.appendChild(epi);
+      }
       counter++; // Number of episodes containing Keyword.
-      let epi=createEpisodeFromObject(allEpisodes[i]);
-      container.appendChild(epi);
     }
   }
-
-  displayNumber.textContent=`Displaying ${counter}/73`;
+  displayNumber.textContent=`Displaying ${counter}/${currentSearchList.length}`;
 }
 
 
